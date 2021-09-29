@@ -3,22 +3,38 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
 pygame.init()
-#* X = < ----- > #Y = /\ \/
+
+#* X = Horizontal Y = Vertical
+
 screenWidth = 640
 screenHeight = 480
 
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 
 pygame.display.set_caption("Space Invaders")
-icon = pygame.image.load('python-icon.png')
+icon = pygame.image.load('C:/Users/dankr/Documents/Programming/Python/Games/python-icon.png')
 pygame.display.set_icon(icon)
 
-playerX = screenWidth / 2
-playerY = screenHeight / 2
-playerIcon = pygame.image.load('spaceship.png')
+#* Player
+playerIcon = pygame.image.load('C:/Users/dankr/Documents/Programming/Python/Games/space-invaders.png')
 
+playerX = 320
+playerY = 400
+playerX_change = 0
+
+#* Enemy
+enemyIcon = pygame.image.load('C:/Users/dankr/Documents/Programming/Python/Games/alien-ship.png')
+
+enemyX = 320
+enemyY = 200
+enemyX_change = 0
+
+#* Game Loop
 def player(x, y):
 	screen.blit(playerIcon, (playerX, playerY))
+
+def enemy(x, y):
+	screen.blit(enemyIcon, (enemyX, enemyY))
 
 running = True
 while running:
@@ -26,16 +42,24 @@ while running:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
-	# If keystroke is pressed, check whether its <- or ->
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_LEFT:
-				print("Left arrow is pressed")
+				playerX_change = -0.1
 			if event.key == pygame.K_RIGHT:
-				print("Right arrow is pressed")
+				playerX_change = 0.1
 		if event.type == pygame.KEYUP:
 			if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-				print("Key has been released")
-	
+				playerX_change = 0
+
+	playerX += playerX_change
 	player(playerX, playerY)
+
+	enemy(enemyX, enemyY)
 	
+	#* Refresh display output
 	pygame.display.update()
+
+	if playerX <= -2:
+		playerX = -2
+	elif playerX >= (640 - 62):
+		playerX = (640 - 62)
